@@ -3,30 +3,37 @@ function Game(opts){}
 Game.prototype = {
 	board: null,
 	rules: null,
-	p1: null,
-	p2: null,
+	players: {
+		local: null,
+		remote: null
+	},
+	turn: {
+		counter: 0,
+		player: null
+	},
 	init: function(board, rules) {
 		this.board = board;
 		this.rules = rules;
 		this.board.init();
 		$("#game-container").append(this.board.render());
-		this.p1 = new Player({id: 1, name: "Test", colour: "white", side: 1});
-		this.p2 = new Player({id: 2, name: "Test", colour: "white", side: 0});
+		this.players.local = new Player({id: 1, name: "Test", colour: "white", side: 1});
+		this.players.remote = new Player({id: 2, name: "Test", colour: "white", side: 0});
 		this.loadGame();
+		this.changeTurn();
 	},
 	loadGame: function(state) {
-		this.loadPlayerState(this.p1, state);
-		this.loadPlayerState(this.p2, state);
+		this.loadPlayerState(this.players.local, state);
+		this.loadPlayerState(this.players.remote, state);
 	},
 	loadPlayerState: function(player, state) {
 		if (state == null) {
-			var knightStart = this.getKnightStartPositions(player.side);
-			var pawnStart = this.getPawnStartPositions(player.side);
+			var knightStartTiles = this.getKnightStartPositions(player.side);
+			var pawnStartTiles = this.getPawnStartPositions(player.side);
 			for(var p in player.units) {
 				if(player.units[p].type == "knight") {
-					knightStart.pop().addUnit(player.units[p]);
+					knightStartTiles.pop().addUnit(player.units[p]);
 				} else {
-					pawnStart.pop().addUnit(player.units[p]);
+					pawnStartTiles.pop().addUnit(player.units[p]);
 				}
 			}
 		}
@@ -90,4 +97,16 @@ Game.prototype = {
 
 		return startPositions;
 	},
+	changeTurn: function() {
+		this.turn.counter++;
+		if(!this.turn.player){
+			//TO DO add who starts game logic
+			this.turn.player = this.players.local;
+		} else if (this.turn.player.id == this.players.local.id) {
+			this.turn.player = this.players.remote;
+		} else {
+			this.turn.player = this.players.local;
+		}
+		return this.turn;
+	}
 };

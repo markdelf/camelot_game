@@ -1,12 +1,15 @@
-function Board(opts){
+function Board(game, opts){
+	this.game = game;
 	this.init();
 }
 
 Board.prototype = {
 	size: {w: 12, h: 16},
 	tiles: [],
+	game: null,
 	castleStructure: [2, 8, 10],
 	el: null,
+	selectedTile: null,
 	init: function() {
 		this.tiles = [];
 		var hc = 1;
@@ -72,5 +75,35 @@ Board.prototype = {
 	},
 	clearSelected: function() {
 		this.el.find(".selected").removeClass("selected");
+		this.el.find(".valid-move").removeClass("valid-move");
+	},
+	onTileSelect: function(tile) {
+		this.selectedTile = tile;
+		if (!tile.isEmpty()) {
+			for(var direction in this.game.rules.moves) {
+				this.checkDirectionValidMoves(tile, this.game.rules.moves[direction], tile);
+			}
+		}
+	},
+	checkDirectionValidMoves: function(tile, vDirection, startTile) {
+		var validLink = true;
+		var tileInDirection = this.traverse(tile, vDirection);
+		if(tileInDirection) {
+			if(tileInDirection.isEmpty()) {
+				if(tile == startTile) {
+					tileInDirection.showValidMove();
+					validLink = false;
+				} else if(!tile.isEmpty()) {
+					tileInDirection.showValidMove();
+				} else {
+					validLink = false;
+				}
+			} else if(tile != startTile && !tile.isEmpty()) {
+				validLink = false;
+			}
+			if(validLink) {
+				this.checkDirectionValidMoves(tileInDirection, vDirection, startTile);	
+			}
+		}
 	}
 };

@@ -13,11 +13,13 @@ Tile.prototype = {
 	alternate: false,
 	first: false,
 	el: null,
+	overlay: null,
 	unit: null,
 	render: function() {
 		var tile = this;
 		if (this.el == null) {
 			this.el = $("<div></div>").addClass("tile").attr("id", "tile_" + this.id);
+			this.overlay = $("<div></div>").addClass("tile-overlay").appendTo(this.el);
 			if(this.alternate) {
 				this.el.addClass("alternate");
 			}
@@ -29,8 +31,17 @@ Tile.prototype = {
 			}
 			this.el.data("tile", this);
 			this.el.click(function() {
-				tile.board.clearSelected();
-				tile.select();
+				if(tile.board.selectedTile && 
+					tile.board.selectedTile.getUnit() && 
+					tile.isValidMove()) {
+					var unit = tile.board.selectedTile.removeUnit();
+					tile.addUnit(unit);
+					tile.board.clearSelected();
+					tile.select();
+				} else {
+					tile.board.clearSelected();
+					tile.select();
+				}
 			});
 		}
 		return this.el;
@@ -57,8 +68,18 @@ Tile.prototype = {
 	},
 	select: function() {
 		this.el.addClass('selected');
+		this.board.onTileSelect(this);
 	},
 	unselect: function() {
 		this.el.removeClass('selected');
+	},
+	showValidMove: function() {
+		this.el.addClass('valid-move');
+	},
+	isValidMove: function() {
+		return this.el.hasClass("valid-move");
+	},
+	hideValidMove: function() {
+		this.el.removeClass('valid-move');	
 	}
 };

@@ -21,5 +21,9 @@ Unit.prototype = {
 	},
 	isFriendlyUnit: function(player) {
 		return (this.player.id == player.id);	
+	},
+	select: function()
+	{
+		
 	}
 };
