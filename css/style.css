@@ -14,11 +14,15 @@
 .tile{
 	width: 40px;
 	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	font-size: 6pt;
 	background-color: #d18b47;
 	float: left;
 	border: 1px solid #d18b47;
 	position: relative;
 	z-index: 1;
+
 }
 
 .tile.alternate{
@@ -36,13 +40,27 @@
 }
 
 .unit{
-	width: 30px;
-	height: 30px;
+	width: auto;
+	height: 100%;
 	border-radius: 30px;
 	-webkit-border-radius: 30px;
 	-moz-border-radius: 30px;
-	margin: 25px auto;
-	background-color: #50b05e;
+	z-index: 3;
+	position: relative;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.unit-knight{
+	background-image: url("../img/theme/standard/unit-knight.png");
+}
+
+.unit-pawn{
+	background-image: url("../img/theme/standard/unit-pawn.png");
+}
+
+.tile:hover{
+	border-color: #444;
 }
 
 .tile.selected{

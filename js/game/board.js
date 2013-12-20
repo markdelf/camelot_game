@@ -1,9 +1,10 @@
-function Board(opts){}
+function Board(opts){
+	this.init();
+}
 
 Board.prototype = {
 	size: {w: 12, h: 16},
 	tiles: [],
-	pieces: [],
 	castleStructure: [2, 8, 10],
 	el: null,
 	init: function() {
@@ -59,6 +60,15 @@ Board.prototype = {
 				return this.tiles[p];
 			}
 		}
+	},
+	//traversal vector [x,y]
+	traverse: function(fromTile, vector) {
+		var newid = fromTile.id.charCodeAt(0) + parseInt(vector[0])
+		var col = String.fromCharCode(newid);
+
+		var row = parseInt(fromTile.id.substr(1)) + vector[1];
+		var nextId = col.toString() + row.toString();
+		return this.getTile(nextId);
 	},
 	clearSelected: function() {
 		this.el.find(".selected").removeClass("selected");
