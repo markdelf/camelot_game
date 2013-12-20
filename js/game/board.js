@@ -73,9 +73,43 @@ Board.prototype = {
 		var nextId = col.toString() + row.toString();
 		return this.getTile(nextId);
 	},
+	getTilesBetween: function(fromTile, toTile) {
+		var fromRow = parseInt(fromTile.id.substr(1));
+		var fromCol = parseInt(fromTile.id.charCodeAt(0) - 65);
+
+		var toRow = parseInt(toTile.id.substr(1));
+		var toCol = parseInt(toTile.id.charCodeAt(0) - 65);
+
+		var interval = 1;
+		var tilesBetween = [];
+
+		if (fromCol == toCol) {
+			if(fromRow > toRow) {
+				interval *= -1;
+			}
+			var cursorTile = fromTile;
+			while(cursorTile != toTile && cursorTile != null) {
+				var tempTile = this.traverse(cursorTile, [0,interval]);
+				if(tempTile != null && tempTile != toTile) {
+					tilesBetween.push(tempTile);
+				}
+				cursorTile = tempTile;
+			}
+			// same column
+		} else if (fromRow == toRow) {
+			if(fromRow < toRow) {
+				interval *= -1;
+			}
+			// same row
+		} else {
+			console.log("Tiles must be in same row or column");
+		}
+		return tilesBetween;
+	},
 	clearSelected: function() {
 		this.el.find(".selected").removeClass("selected");
 		this.el.find(".valid-move").removeClass("valid-move");
+		this.selectedTile = null;
 	},
 	onTileSelect: function(tile) {
 		this.selectedTile = tile;

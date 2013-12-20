@@ -39,8 +39,12 @@ Tile.prototype = {
 					tile.board.clearSelected();
 					tile.select();
 				} else {
-					tile.board.clearSelected();
-					tile.select();
+					if(tile.board.selectedTile != tile) {
+						tile.board.clearSelected();
+						tile.select();
+					} else {
+						tile.board.clearSelected();
+					}
 				}
 			});
 		}
