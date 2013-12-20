@@ -2,10 +2,12 @@ function Game(opts){}
 
 Game.prototype = {
 	board: null,
+	rules: null,
 	p1: null,
 	p2: null,
-	init: function() {
-		this.board = new Board();
+	init: function(board, rules) {
+		this.board = board;
+		this.rules = rules;
 		this.board.init();
 		$("#game-container").append(this.board.render());
 		this.p1 = new Player({id: 1, name: "Test", colour: "white", side: 1});

@@ -18,9 +18,9 @@
 	<script src="js/game/rules.js"></script>
 	<script type="text/javascript">
 		var game = new Game();
-		game.init();
-
+		var board = new Board();
 		var rules = new Rules();
+		game.init(board, rules);
 	</script>
 </body>
 </html>
