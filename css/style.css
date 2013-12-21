@@ -49,14 +49,23 @@
 	position: relative;
 	background-repeat: no-repeat;
 	background-size: cover;
+	background-position: center;
 }
 
-.unit-knight{
-	background-image: url("../img/theme/standard/unit-knight.png");
+.unit-knight-white{
+	background-image: url("../img/theme/standard/knight-white.png");
 }
 
-.unit-pawn{
-	background-image: url("../img/theme/standard/unit-pawn.png");
+.unit-pawn-white{
+	background-image: url("../img/theme/standard/pawn-white.png");
+}
+
+.unit-knight-black{
+	background-image: url("../img/theme/standard/knight-black.png");
+}
+
+.unit-pawn-black{
+	background-image: url("../img/theme/standard/pawn-black.png");
 }
 
 .tile-overlay{

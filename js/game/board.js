@@ -127,6 +127,22 @@ Board.prototype = {
 
 		if(nextTile) {
 			if(nextTile.isEmpty()) {
+				if(previousTile != startTile && !previousTile.isEmpty()) {
+					var trafficUnit = previousTile.getUnit();
+					var isFriendly = trafficUnit.isFriendlyUnit(selectedUnit.player);
+					if(action == "canter" && !isFriendly && !canSwitch) {
+						return;
+					} else if(action == "jump" && isFriendly) {
+						return;
+					}
+					newAction = (isFriendly) ? "canter" : "jump";
+					if(action && newAction != action && !canSwitch) {
+						return false;
+					} else {
+						console.log(newAction);
+						action = newAction;
+					}
+				}
 				if(previousTile == startTile) {
 					if (!diverging) {
 						nextTile.showValidMove();
@@ -137,23 +153,13 @@ Board.prototype = {
 						nextTile.showDivergingMove();
 					} else {
 						nextTile.showValidMove();
-						this.checkDivergingMoves(nextTile, vDirection);
 					}
+					this.checkDivergingMoves(nextTile, vDirection, action);
 				} else {
 					return;
 				}
 			} else if(previousTile != startTile && !previousTile.isEmpty()) {
 				return;
-			}
-			if(!nextTile.isEmpty()) {
-				var trafficUnit = nextTile.getUnit();
-				var isFriendly = trafficUnit.isFriendlyUnit(selectedUnit.player);
-				if(action == "canter" && !isFriendly && !canSwitch) {
-					return;
-				} else if(action == "jump" && isFriendly) {
-					return;
-				}
-				action = (isFriendly) ? "canter" : "jump";
 			}
 			this.checkDirectionValidMoves(nextTile, vDirection, startTile, diverging, action);
 		}
@@ -163,9 +169,33 @@ Board.prototype = {
 		var oppositeDirection = [sourceDirectionVector[0] * -1, sourceDirectionVector[1] * -1];
 		for(var direction in this.game.rules.moves) {
 			var vDirection = this.game.rules.moves[direction];
-			if(vDirection != oppositeDirection) {
+			if (!arrayEqualTo(vDirection, oppositeDirection) && !arrayEqualTo(vDirection, sourceDirectionVector)) {
 				this.checkDirectionValidMoves(tile, vDirection, tile, true, action);
 			}
 		}
 	}
 };
+
+function arrayEqualTo(source, array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
+
+    // compare lengths - can save a lot of time
+    if (source.length != array.length)
+        return false;
+
+    for (var i = 0, l=source.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (source[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!arrayEqualtTo(source, array[i]))
+                return false;
+        }
+        else if (source[i] != array[i]) {
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;
+        }
+    }
+    return true;
+}

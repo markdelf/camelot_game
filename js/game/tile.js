@@ -84,6 +84,9 @@ Tile.prototype = {
 		return this;
 	},
 	showValidMove: function() {
+		if(this.isDivergingMove()) {
+			this.hideDivergingMove();
+		}
 		this.el.addClass('valid-move');
 		return this;
 	},
