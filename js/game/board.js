@@ -139,7 +139,6 @@ Board.prototype = {
 					if(action && newAction != action && !canSwitch) {
 						return false;
 					} else {
-						console.log(newAction);
 						action = newAction;
 					}
 				}

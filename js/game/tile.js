@@ -34,10 +34,7 @@ Tile.prototype = {
 				if(tile.board.selectedTile && 
 					tile.board.selectedTile.getUnit() && 
 					tile.isValidMove()) {
-					var unit = tile.board.selectedTile.removeUnit();
-					tile.addUnit(unit);
-					tile.board.clearSelected();
-					tile.select();
+					tile.makeMove();
 				} else {
 					if(tile.board.selectedTile != tile) {
 						tile.board.clearSelected();
@@ -49,6 +46,20 @@ Tile.prototype = {
 			});
 		}
 		return this.el;
+	},
+	makeMove: function() {
+		var unit = this.board.selectedTile.removeUnit();
+		var tilesBetween = this.board.getTilesBetween(this.board.selectedTile, this);
+		for(var p in tilesBetween) {
+			var tile = tilesBetween[p];
+			if(!tile.isEmpty() && tile.getUnit().isEnemyUnit(unit.player)) {
+				var deadUnit = tile.removeUnit();
+				deadUnit.player.addToGraveyard(deadUnit);
+			}
+		}
+		this.addUnit(unit);
+		this.board.clearSelected();
+		this.select();
 	},
 	addUnit: function(unit) {
 		if(this.unit == null) {

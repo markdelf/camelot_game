@@ -35,6 +35,9 @@ Player.prototype = {
 			this.units.push(unit);
 		}
 	},
+	addToGraveyard: function(unit) {
+		this.graveyard.push(unit);
+	},
 	render: function() {
 
 	}
