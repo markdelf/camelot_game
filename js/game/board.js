@@ -81,28 +81,30 @@ Board.prototype = {
 		var toCol = parseInt(toTile.id.charCodeAt(0) - 65);
 
 		var interval = 1;
+		var traversalVector;
 		var tilesBetween = [];
 
 		if (fromCol == toCol) {
 			if(fromRow > toRow) {
 				interval *= -1;
 			}
-			var cursorTile = fromTile;
-			while(cursorTile != toTile && cursorTile != null) {
-				var tempTile = this.traverse(cursorTile, [0,interval]);
-				if(tempTile != null && tempTile != toTile) {
-					tilesBetween.push(tempTile);
-				}
-				cursorTile = tempTile;
-			}
-			// same column
+			traversalVector = [0,interval];
 		} else if (fromRow == toRow) {
-			if(fromRow < toRow) {
+			if(fromCol > toCol) {
 				interval *= -1;
 			}
-			// same row
+			traversalVector = [interval,0];
 		} else {
 			console.log("Tiles must be in same row or column");
+			return tilesBetween;
+		}
+		var cursorTile = fromTile;
+		while(cursorTile != toTile && cursorTile != null) {
+			var tempTile = this.traverse(cursorTile, traversalVector);
+			if(tempTile != null && tempTile != toTile) {
+				tilesBetween.push(tempTile);
+			}
+			cursorTile = tempTile;
 		}
 		return tilesBetween;
 	},
