@@ -71,19 +71,40 @@ Tile.prototype = {
 		return this.unit;
 	},
 	select: function() {
-		this.el.addClass('selected');
-		this.board.onTileSelect(this);
+		if (this.isEmpty()) {
+			this.board.clearSelected();
+		} else {
+			this.el.addClass('selected');
+			this.board.onTileSelect(this);
+		}
+		return this;
 	},
 	unselect: function() {
 		this.el.removeClass('selected');
+		return this;
 	},
 	showValidMove: function() {
 		this.el.addClass('valid-move');
+		return this;
 	},
 	isValidMove: function() {
 		return this.el.hasClass("valid-move");
 	},
 	hideValidMove: function() {
 		this.el.removeClass('valid-move');	
+		return this;
+	},
+	showDivergingMove: function() {
+		if (!this.isValidMove()) {
+			this.el.addClass("valid-move-diverging");
+		}
+		return this;
+	},
+	isDivergingMove: function() {
+		return this.el.hasClass("valid-move-diverging");
+	},
+	hideDivergingMove: function() {
+		this.el.removeClass('valid-move-diverging');		
+		return this;
 	}
 };

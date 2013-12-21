@@ -109,6 +109,7 @@ Board.prototype = {
 	clearSelected: function() {
 		this.el.find(".selected").removeClass("selected");
 		this.el.find(".valid-move").removeClass("valid-move");
+		this.el.find(".valid-move-diverging").removeClass("valid-move-diverging");
 		this.selectedTile = null;
 	},
 	onTileSelect: function(tile) {
@@ -119,24 +120,51 @@ Board.prototype = {
 			}
 		}
 	},
-	checkDirectionValidMoves: function(tile, vDirection, startTile) {
-		var validLink = true;
-		var tileInDirection = this.traverse(tile, vDirection);
-		if(tileInDirection) {
-			if(tileInDirection.isEmpty()) {
-				if(tile == startTile) {
-					tileInDirection.showValidMove();
-					validLink = false;
-				} else if(!tile.isEmpty()) {
-					tileInDirection.showValidMove();
+	checkDirectionValidMoves: function(previousTile, vDirection, startTile, diverging, action) {
+		var nextTile = this.traverse(previousTile, vDirection);
+		var selectedUnit = this.selectedTile.getUnit();
+		var canSwitch = ((!action || action == "canter") && this.game.rules.units[selectedUnit.type].chain);
+
+		if(nextTile) {
+			if(nextTile.isEmpty()) {
+				if(previousTile == startTile) {
+					if (!diverging) {
+						nextTile.showValidMove();
+					}
+					return;
+				} else if(!previousTile.isEmpty()) {
+					if(diverging) {
+						nextTile.showDivergingMove();
+					} else {
+						nextTile.showValidMove();
+						this.checkDivergingMoves(nextTile, vDirection);
+					}
 				} else {
-					validLink = false;
+					return;
 				}
-			} else if(tile != startTile && !tile.isEmpty()) {
-				validLink = false;
+			} else if(previousTile != startTile && !previousTile.isEmpty()) {
+				return;
 			}
-			if(validLink) {
-				this.checkDirectionValidMoves(tileInDirection, vDirection, startTile);	
+			if(!nextTile.isEmpty()) {
+				var trafficUnit = nextTile.getUnit();
+				var isFriendly = trafficUnit.isFriendlyUnit(selectedUnit.player);
+				if(action == "canter" && !isFriendly && !canSwitch) {
+					return;
+				} else if(action == "jump" && isFriendly) {
+					return;
+				}
+				action = (isFriendly) ? "canter" : "jump";
+			}
+			this.checkDirectionValidMoves(nextTile, vDirection, startTile, diverging, action);
+		}
+		return;
+	},
+	checkDivergingMoves: function(tile, sourceDirectionVector, action) {
+		var oppositeDirection = [sourceDirectionVector[0] * -1, sourceDirectionVector[1] * -1];
+		for(var direction in this.game.rules.moves) {
+			var vDirection = this.game.rules.moves[direction];
+			if(vDirection != oppositeDirection) {
+				this.checkDirectionValidMoves(tile, vDirection, tile, true, action);
 			}
 		}
 	}
