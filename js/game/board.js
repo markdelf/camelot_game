@@ -10,6 +10,25 @@ Board.prototype = {
 	castleStructure: [2, 8, 10],
 	el: null,
 	selectedTile: null,
+	padding: 10,
+	resize: function() {
+		var window_w = $(window).width();
+		var window_h = $(window).height();
+		
+		var tile_h = (window_h - this.padding) / this.size.h;
+		var tile_w = (window_w - this.padding) / this.size.w;
+		var tile_size = (tile_h > tile_w) ? tile_w : tile_h;
+		$(".tile").each(function(){
+			$(this).css("width", tile_size + "px");
+			$(this).css("height", tile_size + "px");
+		});
+		this.el.css("width", ((tile_size * this.size.w) + this.padding) + "px");
+		if (this.el.height() < window_h) {
+			$('#game-container').css("padding-top", ((window_h - this.el.height()) / 2) + "px");
+		} else {
+			$('#game-container').css("padding-top", "");
+		}
+	},
 	init: function() {
 		this.tiles = [];
 		var hc = 1;
@@ -48,7 +67,8 @@ Board.prototype = {
 			hc++;
 		}
 	},
-	render: function() {
+	render: function() {var that = this;
+		var that = this;
 		if(this.el == null) {
 			this.el = $("<div></div>").addClass("board");
 			for (var t in this.tiles) {
@@ -71,7 +91,12 @@ Board.prototype = {
 
 		var row = parseInt(fromTile.id.substr(1)) + vector[1];
 		var nextId = col.toString() + row.toString();
-		return this.getTile(nextId);
+		var tile = this.getTile(nextId);
+		if (tile && !tile.isOutlier()) {
+			return tile;
+		} else {
+			return null;
+		}
 	},
 	getTilesBetween: function(fromTile, toTile) {
 		var fromRow = parseInt(fromTile.id.substr(1));

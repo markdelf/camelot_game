@@ -30,7 +30,7 @@ Tile.prototype = {
 				this.el.addClass("first");
 			}
 			this.el.data("tile", this);
-			this.el.click(function() {
+			this.el.click(function(event) {
 				if(tile.board.selectedTile && 
 					tile.board.selectedTile.getUnit() && 
 					tile.isValidMove()) {
@@ -82,7 +82,7 @@ Tile.prototype = {
 		return this.unit;
 	},
 	select: function() {
-		if (this.isEmpty()) {
+		if (this.isEmpty() || this.isOutlier()) {
 			this.board.clearSelected();
 		} else {
 			this.el.addClass('selected');
@@ -120,5 +120,8 @@ Tile.prototype = {
 	hideDivergingMove: function() {
 		this.el.removeClass('valid-move-diverging');		
 		return this;
+	},
+	isOutlier: function() {
+		return this.el.hasClass("outlier");
 	}
 };

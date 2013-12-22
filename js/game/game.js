@@ -15,7 +15,11 @@ Game.prototype = {
 		this.board = board;
 		this.rules = rules;
 		this.board.init();
-		$("#game-container").append(this.board.render());
+		$("#game-container").append(this.render());
+		$(window).unbind('resize').bind('resize', function(){ 
+			board.resize(); 
+		});
+		this.board.resize();
 		this.players.local = new Player({id: 1, name: "Test", colour: "white", side: 1});
 		this.players.remote = new Player({id: 2, name: "Test", colour: "white", side: 0});
 		this.loadGame();
@@ -39,8 +43,8 @@ Game.prototype = {
 		}
 	},
 	render: function() {
-		board.render();
-
+		var el = board.render();
+		return el;
 	},
 	getKnightStartPositions: function(side) {
 		if (side == 1) {

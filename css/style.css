@@ -1,19 +1,24 @@
-/* Put your CSS here */
-.ember-application {
-    margin: 20px;
+html, body{
+	overflow: hidden;
+	background-color: #000;
+	padding: 0;
+	margin: 0;
+}
+
+#game-container{
+	background-color: #000;
 }
 
 .board {
 	overflow: auto;
 	padding: 5px;
-	float: left;
-	background-color: brown;
-	margin: 20px;
+	margin: 0px auto;
+	background-color: rgba(165, 42, 42, 1);
 }
 
 .tile{
-	width: 45px;
-	height: 45px;
+	width: 10px;
+	height: 10px;
 	line-height: 45px;
 	text-align: center;
 	font-size: 6pt;
@@ -30,9 +35,13 @@
 	border-color: #ffce9e;
 }
 
+.tile:hover{
+	border-color: #666;
+}
+
 .tile.outlier{
-	background-color: #fff;
-	border-color: #fff;
+	background-color: rgba(165, 42, 42, 1);
+	border-color: rgba(145, 32, 32, 1);
 }
 
 .tile.first{
@@ -75,14 +84,10 @@
     background-color: transparent;
 }
 
-.tile:hover{
-	border-color: #444;
-}
-
 .tile.selected{
 	-webkit-animation: pulse 2s infinite ease-in-out;
 	animation: pulse 2s infinite ease-in-out;
-	border-color: #fff;
+	border-color: #000;
 	z-index: 2;
 	position: relative;
 }
@@ -100,13 +105,13 @@
 }
 
 @keyframes pulse {
-	0% { box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2); }
-	50% { box-shadow: 0px 0px 14px rgba(0, 0, 0, 1); }
-	100% { box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2); }
+	0% { box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); }
+	50% { box-shadow: 0px 0px 20px rgba(0, 0, 0, 1); }
+	100% { box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); }
 }
 
 @-webkit-keyframes pulse {
-	0% { -webkit-box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2); }
-	50% { -webkit-box-shadow: 0px 0px 14px rgba(0, 0, 0, 1); }
-	100% { -webkit-box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2); }
+	0% { -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); }
+	50% { -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 1); }
+	100% { -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); }
 }
