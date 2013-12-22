@@ -26,7 +26,7 @@ Board.prototype = {
 		if (this.el.height() < window_h) {
 			$('#game-container').css("padding-top", ((window_h - this.el.height()) / 2) + "px");
 		} else {
-			$('#game-container').css("padding-top", "");
+			$('#game-container').css("padding-top", "0px");
 		}
 	},
 	init: function() {
@@ -147,6 +147,7 @@ Board.prototype = {
 			}
 		}
 	},
+	//checks all valid moves in this direction and triggers diverging checks
 	checkDirectionValidMoves: function(previousTile, vDirection, startTile, diverging, action) {
 		var nextTile = this.traverse(previousTile, vDirection);
 		var selectedUnit = this.selectedTile.getUnit();
@@ -192,16 +193,33 @@ Board.prototype = {
 		return;
 	},
 	checkDivergingMoves: function(tile, sourceDirectionVector, action) {
-		var oppositeDirection = [sourceDirectionVector[0] * -1, sourceDirectionVector[1] * -1];
+		var opposite = this.getOppositeDirection(sourceDirectionVector);
 		for(var direction in this.game.rules.moves) {
-			var vDirection = this.game.rules.moves[direction];
-			if (!arrayEqualTo(vDirection, oppositeDirection) && !arrayEqualTo(vDirection, sourceDirectionVector)) {
-				this.checkDirectionValidMoves(tile, vDirection, tile, true, action);
+			direction = this.game.rules.moves[direction];
+			if (!arrayEqualTo(direction, opposite) && !arrayEqualTo(direction, sourceDirectionVector)) {
+				this.checkDirectionValidMoves(tile, direction, tile, true, action);
 			}
 		}
+	},
+	//these will be used instead of valid move once started moving (made first canter/jump)
+	checkAllProceedMoves: function(tile, sourceDirectionVector, action) {
+		var opposite = this.getOppositeDirection(sourceDirectionVector);
+		for(var direction in this.game.rules.moves) {
+			direction = this.game.rules.moves[direction];
+			if (!arrayEqualTo(direction, opposite) && !arrayEqualTo(direction, sourceDirectionVector)) {
+				this.checkProceedMoves(tile, direction, tile, true, action);
+			}
+		}
+	},
+	checkProceedMoves: function(previousTile, vDirection, startTile, diverging, action) {
+
+	},
+	getOppositeDirection: function(vector) {
+		return [vector[0] * -1, vector[1] * -1];
 	}
 };
 
+//Helper function to compare arrays
 function arrayEqualTo(source, array) {
     // if the other array is a falsy value, return
     if (!array)

@@ -11,7 +11,9 @@ Game.prototype = {
 		counter: 0,
 		player: null
 	},
+	socket: null,
 	init: function(board, rules) {
+		//this.socket = io.connect("http://127.0.0.1:8080");
 		this.board = board;
 		this.rules = rules;
 		this.board.init();
