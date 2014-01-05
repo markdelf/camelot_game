@@ -3,6 +3,7 @@ function Game(opts){}
 Game.prototype = {
 	board: null,
 	rules: null,
+	el: null,
 	players: {
 		local: null,
 		remote: null
@@ -11,21 +12,27 @@ Game.prototype = {
 		counter: 0,
 		player: null
 	},
-	socket: null,
 	init: function(board, rules) {
-		//this.socket = io.connect("http://127.0.0.1:8080");
+		var that = this;
 		this.board = board;
 		this.rules = rules;
 		this.board.init();
-		$("#game-container").append(this.render());
+		this.render();
+		this.show();
 		$(window).unbind('resize').bind('resize', function(){ 
-			board.resize(); 
+			that.board.resize(); 
 		});
 		this.board.resize();
 		this.players.local = new Player({id: 1, name: "Test", colour: "white", side: 1});
 		this.players.remote = new Player({id: 2, name: "Test", colour: "white", side: 0});
 		this.loadGame();
 		this.changeTurn();
+	},
+	show: function() {
+		this.el.show();
+	},
+	hide: function() {
+		this.el.hide();
 	},
 	loadGame: function(state) {
 		this.loadPlayerState(this.players.local, state);
@@ -45,8 +52,11 @@ Game.prototype = {
 		}
 	},
 	render: function() {
-		var el = board.render();
-		return el;
+		if(!this.el) {
+			this.el = $("#game-container");
+			this.el.append(this.board.render());
+		}
+		return this.el;
 	},
 	getKnightStartPositions: function(side) {
 		if (side == 1) {

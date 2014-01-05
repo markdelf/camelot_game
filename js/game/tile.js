@@ -85,8 +85,10 @@ Tile.prototype = {
 		if (this.isEmpty() || this.isOutlier()) {
 			this.board.clearSelected();
 		} else {
-			this.el.addClass('selected');
-			this.board.onTileSelect(this);
+			if(!this.getUnit().isEnemyUnit(this.board.game.players.local)) {
+				this.el.addClass('selected');
+				this.board.onTileSelect(this);
+			}
 		}
 		return this;
 	},

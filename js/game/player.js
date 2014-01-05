@@ -1,7 +1,7 @@
 function Player(opts) {
 	this.id = opts.id;
-	this.name = opts.col;
-	this.colour = opts.row;
+	this.name = opts.name;
+	this.colour = opts.colour;
 	if(opts.side) {
 		this.side = opts.side;
 	}
