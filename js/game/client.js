@@ -6,7 +6,13 @@ Client.prototype = {
 	connected: false,
 	activeGame: null,
 	statusBar: null,
+	init: function() {
+		this.showSettings();
+	},
 	connect: function() {
+		this.getStatusBar()
+			.addClass("offline")
+			.html("Establishing connection..");
 		var that = this;
 		this.socket = io.connect(this.serverUrl);
 		this.socket.on("connect", function(){ 
@@ -41,7 +47,7 @@ Client.prototype = {
 		return this.statusBar;
 	},
 	newGame: function() {
-		this.socket.emit("new-game", {});
+		this.socket.emit("new-game", {player: {name: this.getPlayerName()}});
 	},
 	onJoinGame: function(data) {
 		this.activeGame = new Game();
@@ -56,5 +62,25 @@ Client.prototype = {
 		this.activeGame = null;
 		this.getStatusBar()
 			.html("Games lobby.");
+	},
+	showSettings: function() {
+		$("#playerSettings").modal();
+		if (this.getPlayerName()) {
+			$("#playerSettings").find("input[name='player.name']").val(this.getPlayerName());
+		}
+	},
+	getPlayerName: function() {
+		return localStorage.getItem("player.name");
+	},
+	saveSettings: function() {
+		var fields = $("#playerSettings input, #playerSettings select, #playerSettings textarea");
+		fields.each(function(){
+			localStorage.setItem($(this).attr("name"), $(this).val());
+		});	
+		if (this.getPlayerName) {
+			this.connect();
+			$("#playerSettings").modal('hide');
+		}
+		return false;
 	}
 };
