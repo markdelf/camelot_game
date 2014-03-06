@@ -8,10 +8,7 @@ Game.prototype = {
 		local: null,
 		remote: null
 	},
-	turn: {
-		counter: 0,
-		player: null
-	},
+	turnManager: null,
 	init: function(board, rules) {
 		var that = this;
 		this.board = board;
@@ -25,6 +22,7 @@ Game.prototype = {
 		this.board.resize();
 		this.players.local = new Player({id: 1, name: "Test", colour: "white", side: 1});
 		this.players.remote = new Player({id: 2, name: "Test", colour: "white", side: 0});
+		this.turnManager = new TurnManager();
 		this.loadGame();
 		this.changeTurn();
 	},
@@ -114,15 +112,16 @@ Game.prototype = {
 		return startPositions;
 	},
 	changeTurn: function() {
-		this.turn.counter++;
-		if(!this.turn.player){
+		this.turnManager.nextTurn();
+		var player = this.turnManager.getCurrentTurn().getPlayer();
+		if (!player) {
 			//TO DO add who starts game logic
-			this.turn.player = this.players.local;
-		} else if (this.turn.player.id == this.players.local.id) {
-			this.turn.player = this.players.remote;
+			this.turnManager.getCurrentTurn().setPlayer(this.players.local);
+		} else if (player.id == this.players.local.id) {
+			this.turnManager.getCurrentTurn().setPlayer(this.players.remote);
 		} else {
-			this.turn.player = this.players.local;
+			this.turnManager.getCurrentTurn().setPlayer(this.players.local);
 		}
-		return this.turn;
+		return this;
 	}
 };
