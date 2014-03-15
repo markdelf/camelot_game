@@ -19,12 +19,16 @@
 	<script src="js/game/turn.js"></script>
 	<script src="js/game/turn_manager.js"></script>
 	<script src="js/game/game.js"></script>
+	<script src="js/game/ui.js"></script>
 	<script src="js/game/rules.js"></script>
 	<script type="text/javascript">
 		var game = new Game();
 		var board = new Board(game);
 		var rules = new Rules();
 		game.init(board, rules);
+
+		var ui = new Ui(game);
+		$("body").append(ui.render());
 	</script>
 </body>
 </html>

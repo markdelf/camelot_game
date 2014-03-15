@@ -1,4 +1,4 @@
-function Turn(opts){}
+function Turn(opts) {}
 
 Turn.prototype = {
     move: null,
@@ -15,15 +15,26 @@ Turn.prototype = {
         return this.player;
     },
     setStartTile: function(startTile) {
-        this.startTile = startTile;
-        this.move = this.startTile.id;
-        return this;
+        if (!this.hasMoved) {
+            this.startTile = startTile;
+            this.move = this.startTile.id;
+            return this;
+        }
     },
     getStartTile: function() {
         return this.startTile;
     },
+    hasVisited: function(tile) {
+        return (this.move.indexOf(tile.id) >= 0);
+    },
     addCanter: function(toTile) {
-        if(this.hasJumped) {
+        if (this.hasVisited(toTile)) {
+            this.illegalMove();
+        }
+        if (this.hasJumped) {
+            this.illegalMove();
+        }
+        if (this.hasMoved && !this.hasCantered) {
             this.illegalMove();
         }
         this.hasMoved = true;
@@ -32,13 +43,23 @@ Turn.prototype = {
         return this;
     },
     addJump: function(toTile) {
+        if (this.hasVisited(toTile)) {
+            this.illegalMove();
+        }
+        if (this.hasMoved && !this.hasCantered && !this.hasJumped) {
+            //to add logic if is knight
+            this.illegalMove();
+        }
         this.hasMoved = true;
         this.hasJumped = true;
         this.move += 'x' + toTile.id;
         return this;
     },
     addMove: function(toTile) {
-        if(this.hasMoved) {
+        if (this.hasVisited(toTile)) {
+            this.illegalMove();
+        }
+        if (this.hasMoved) {
             this.illegalMove();
         }
         this.hasMoved = true;
