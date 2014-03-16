@@ -7,6 +7,12 @@ html, body{
 
 #game-container{
 	background-color: #000;
+	background-image: url("../img/theme/standard/wood.jpg");
+	background-repeat: repeat;
+	background-position: top left;
+   	-moz-box-shadow:    inset 0 0 100px #000000;
+   	-webkit-box-shadow: inset 0 0 100px #000000;
+   	box-shadow:         inset 0 0 100px #000000;
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -41,7 +47,10 @@ html, body{
 	overflow: auto;
 	padding: 5px;
 	margin: 0px auto;
-	background-color: rgba(165, 42, 42, 1);
+	background-color: rgba(165, 42, 42, 0.5);
+	box-shadow: 0px 0px 100px #000;
+	-moz-box-shadow: 0px 0px 100px #000;
+	-webkit-box-shadow: 0px 0px 100px #000;
 }
 
 .tile{
@@ -65,6 +74,9 @@ html, body{
 
 .tile:hover{
 	border-color: #666;
+	-moz-box-shadow:    inset 0 0 5px #555;
+   	-webkit-box-shadow: inset 0 0 5px #555;
+   	box-shadow:         inset 0 0 5px #555;
 }
 
 .tile.outlier{
@@ -133,15 +145,63 @@ html, body{
 }
 
 #ui-container{
-	background-color: rgba(255,255,255,0.5);
+	background-image: url("../img/theme/standard/wood.jpg");
+	background-repeat: repeat;
+	background-position: top left;
+   	-moz-box-shadow:    inset 0 0 200px #000000;
+   	-webkit-box-shadow: inset 0 0 200px #000000;
+   	box-shadow:         inset 0 0 200px #000000;
+   	border-radius: 200px;
+   	-webkit-border-radius: 200px;
+   	-moz-border-radius: 200px;
+   	border: 3px solid #8B4513;
 	position: absolute;
 	z-index: 10;
-	right: 0px;
-	width: 100px;
+	top: 20px;
+	right: 20px;
+	width: 130px;
+	height: 130px;
 	text-align: center;
 	box-sizing: content-box;
 	padding: 20px;
 }
+
+button#endTurn{
+	background: none;
+	outline: none;
+	border: none;
+	padding: 0px;
+	width: 108px;
+	height: 108px;
+	background-image: url("../img/theme/standard/hourglass.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	text-indent: -200px;
+	position: absolute;
+	top:0; bottom:0; left:0; right:0;
+	margin: auto;
+}
+
+button#endTurn:hover{
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+}
+
+button#endTurn:active{
+	opacity: 0.5;
+}
+
+@-moz-keyframes spin { 
+	100% { -moz-transform: rotate(360deg); } 
+}
+@-webkit-keyframes spin { 
+	100% { -webkit-transform: rotate(360deg); } 
+}
+@keyframes spin {
+	100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } 
+}
+
 
 @keyframes pulse {
 	0% { box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); }
