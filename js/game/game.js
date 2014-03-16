@@ -30,7 +30,7 @@ Game.prototype = {
         this.players.p2 = new Player({
             id: 2,
             name: "Alex",
-            colour: "white",
+            colour: "black",
             isLocal: true,
             side: 0
         });

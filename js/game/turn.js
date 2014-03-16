@@ -9,6 +9,16 @@ Turn.prototype = {
     startTile: null,
     setPlayer: function(player) {
         this.player = player;
+        $(".main-player").removeClass("white-player").removeClass("black-player");
+        $(".secondary-player").removeClass("white-player").removeClass("black-player");
+        if (player.colour == "white") {
+            $(".main-player").addClass("white-player");
+            $(".secondary-player").addClass("black-player");
+        } else {
+            $(".main-player").addClass("black-player");
+            $(".secondary-player").addClass("white-player");
+        }
+        $(".player-name").html(player.name);
         return this;
     },
     getPlayer: function() {
