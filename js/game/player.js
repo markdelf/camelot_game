@@ -18,6 +18,7 @@ Player.prototype = {
         pawn: 10,
         knight: 4
     },
+    armySize: 100,
     units: [],
     graveyard: [],
     side: 0,
@@ -41,6 +42,12 @@ Player.prototype = {
         }
     },
     addToGraveyard: function(unit) {
+        if (unit.type == "knight") {
+            this.armySize -= 10;
+        } else {
+            this.armySize -= 6;
+        }
+        $(".p" + this.id + "-army-size").html(this.armySize);
         this.graveyard.push(unit);
     },
     render: function() {

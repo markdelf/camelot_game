@@ -5,13 +5,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>Camelot Game</title>
 	<link rel="stylesheet" href="css/normalize.css">
-	<link rel="stylesheet" href="css/style.css">
 	<link  rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 	<div id="game-container"></div>
 	<script src="js/libs/jquery-1.10.2.js"></script>
 	<script src="js/libs/socket.io.js"></script>
+	<script src="js/libs/draggabilly.min.js"></script>
 	<script src="js/game/tile.js"></script>
 	<script src="js/game/unit.js"></script>
 	<script src="js/game/player.js"></script>
@@ -21,6 +22,22 @@
 	<script src="js/game/game.js"></script>
 	<script src="js/game/ui.js"></script>
 	<script src="js/game/rules.js"></script>
+	<div id="player-controls" class="hud-item">
+		<div class="handle"><span class="glyphicon glyphicon-move"></span></div>
+		<div class="player main-player white-player">
+			<div class="overlay">
+				<span class="p1-army-size">100</span>
+			</div>
+		</div>
+		<div class="player secondary-player black-player">
+			<div class="overlay">
+				<span class="p2-army-size">100</span>
+			</div>
+		</div>
+		<div class="turn-label"><span class="current-player-name">Mark</span>'s turn<br />
+		<small>Round <span class="round-number">1</span></small></div>
+		<button id="endTurn" class="btn btn-sm btn-success">End Turn</button>
+	</div>
 	<script type="text/javascript">
 		var game = new Game();
 		var board = new Board(game);
@@ -29,19 +46,10 @@
 
 		var ui = new Ui(game);
 		$("body").append(ui.render());
+		var elem = document.getElementById('player-controls');
+        var draggie = new Draggabilly( elem, {
+		  'handle': '.handle'
+		});
 	</script>
-	<div class="turn-manager-ui">
-		<div class="player main-player white-player">
-			<div class="overlay">
-				0
-			</div>
-		</div>
-		<div class="player secondary-player black-player">
-			<div class="overlay">
-				0
-			</div>
-		</div>
-		<div class="turn-label"><span class="player-name">Mark</span>'s turn</div>
-	</div>
 </body>
 </html>

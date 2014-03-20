@@ -5,6 +5,12 @@ html, body{
 	margin: 0;
 }
 
+.btn{
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+
 #game-container{
 	background-color: #000;
 	background-image: url("../img/theme/standard/wood.jpg");
@@ -144,67 +150,44 @@ html, body{
 	background-color: rgba(11, 11, 178, 0.25);
 }
 
-#ui-container{
-	background-image: url("../img/theme/standard/wood.jpg");
-	background-repeat: repeat;
-	background-position: top left;
-   	-moz-box-shadow:    inset 0 0 200px #000000;
-   	-webkit-box-shadow: inset 0 0 200px #000000;
-   	box-shadow:         inset 0 0 200px #000000;
-   	border-radius: 200px;
-   	-webkit-border-radius: 200px;
-   	-moz-border-radius: 200px;
-   	border: 3px solid #8B4513;
+.hud-item{
 	position: absolute;
-	z-index: 10;
-	top: 20px;
-	right: 20px;
-	width: 130px;
-	height: 130px;
-	text-align: center;
-	box-sizing: content-box;
-	padding: 20px;
-}
-
-button#endTurn{
-	background: none;
-	outline: none;
-	border: none;
-	padding: 0px;
-	width: 108px;
-	height: 108px;
-	background-image: url("../img/theme/standard/hourglass.png");
-	background-repeat: no-repeat;
-	background-size: cover;
-	text-indent: -200px;
-	position: absolute;
-	top:0; bottom:0; left:0; right:0;
-	margin: auto;
-}
-
-button#endTurn:hover{
-    -webkit-animation: spin 4s linear infinite;
-    -moz-animation: spin 4s linear infinite;
-    animation:spin 4s linear infinite;
-}
-
-button#endTurn:active{
-	opacity: 0.5;
-}
-
-.turn-manager-ui{
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
-	width: 200px;
-	height: 200px;
 	z-index: 8;
+	background-color: #ccc;
+	background-color: rgba(255,255,255, 0.2);
+	padding: 20px;
+	-moz-box-shadow:    0 0 10px #000000;
+   	-webkit-box-shadow: 0 0 10px #000000;
+   	box-shadow:         0 0 10px #000000;
+   	-webkit-user-select: none;
+   	-moz-user-select: none;
+   	-ms-user-select: none;
+   	user-select: none;
 }
 
-.turn-manager-ui .player{
+.hud-item .handle{
+	padding: 5px 7px 7px 3px;
+	color: #444;
+	cursor: move;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: #fff;
+	background-color: rgba(255,255,255,0.7);
+	-webkit-border-bottom-right-radius: 20px;
+	-moz-border-radius-bottomright: 20px;
+	border-bottom-right-radius: 20px;
+}
+
+#player-controls{
+	top: 100px;
+	left: 281px;
+	padding: 45px 30px 15px 30px;
+}
+
+#player-controls .player{
    	background-repeat: no-repeat;
    	background-size: cover;
-	position: absolute;
 	background-color: #fff;
 	-moz-box-shadow:    inset 0 0 10px #000000;
    	-webkit-box-shadow: inset 0 0 10px #000000;
@@ -213,9 +196,8 @@ button#endTurn:active{
    	overflow: hidden;
 }
 
-.turn-manager-ui .main-player{
-	left: 20px;
-	top: 20px;
+#player-controls .main-player{
+	position: relative;
 	width: 100px;
 	height: 100px;
 	border-radius: 100px;
@@ -226,15 +208,32 @@ button#endTurn:active{
    	font-size: 20pt;
 }
 
-.white-player{
+#player-controls .secondary-player{
+	position: absolute;
+	right: 20px;
+	top: 25px;
+	width: 50px;
+	height: 50px;
+	border-radius: 50px;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	line-height: 45px;
+   	font-size: 14pt;
+}
+
+#player-controls .secondary-player:hover{
+	z-index: 2;
+}
+
+#player-controls .white-player{
 	background-image: url('../img/theme/standard/knight-white.png');
 }
 
-.black-player{
+#player-controls .black-player{
 	background-image: url('../img/theme/standard/knight-black.png');
 }
 
-.turn-manager-ui .overlay{
+#player-controls .overlay{
 	position: absolute;
 	left: 0px;
 	top: 0px;
@@ -248,46 +247,29 @@ button#endTurn:active{
 	cursor: default;
 }
 
-.turn-manager-ui .player:hover .overlay{
+#player-controls .player:hover .overlay{
 	opacity: 1;
 }
 
-
-.turn-manager-ui .secondary-player{
-	left: 85px;
-	top: 85px;
-	width: 50px;
-	height: 50px;
-	border-radius: 50px;
-	-moz-border-radius: 50px;
-	-webkit-border-radius: 50px;
-	line-height: 45px;
-   	font-size: 14pt;
-}
-
-.turn-manager-ui .secondary-player:hover{
-	z-index: 2;
-}
-
-.turn-manager-ui .turn-label{
-	position: absolute;
+#player-controls .turn-label{
 	cursor: default;
-	bottom: 10px;
-	left: 20px;
-	width: 120px;
+	bottom: 45px;
 	text-align: center;
 	color: #fff;
-	background-image: url("../img/theme/standard/wood.jpg");
-	background-repeat: repeat;
-	background-position: top left;
-	-moz-box-shadow: inset 0 0 30px #000000;
-	-webkit-box-shadow: inset 0 0 30px #000000;
-	box-shadow: inset 0 0 30px #000000;
-	padding: 5px 10px;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border: 1px solid #8B4513;
+	margin-top: 30px;
+	margin-bottom: 4px;
+	background-color: #fff;
+	background-color: rgba(255,255,255,0.8);
+	padding: 5px 0px;
+	color: #000;
+	margin: 15px -30px 10px -30px;
+	line-height: 100%;
+}
+
+#player-controls #endTurn{
+	width: 100%;
+	text-align: center;
+	font-weight: 700;
 }
 
 @-moz-keyframes spin { 

@@ -9,13 +9,13 @@ Ui.prototype = {
     render: function() {
         var that = this;
         if (this.el == null) {
-            this.el = $("<div></div>").attr("id", "ui-container");
+            this.el = $(".turn-manager-ui:first");
         }
         if (this.endTurnButton == null) {
-            this.endTurnButton = $("<button>End Turn</button>").attr("id", "endTurn").bind("click", function() {
+            this.endTurnButton = $("#endTurn");
+            this.endTurnButton.bind("click", function() {
                 that.endTurnClicked();
             });
-            this.el.append(this.endTurnButton);
         }
         return this.el;
     },
