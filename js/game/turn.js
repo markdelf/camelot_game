@@ -9,14 +9,12 @@ Turn.prototype = {
     startTile: null,
     setPlayer: function(player) {
         this.player = player;
-        $(".main-player").removeClass("white-player").removeClass("black-player");
-        $(".secondary-player").removeClass("white-player").removeClass("black-player");
         if (player.colour == "white") {
-            $(".main-player").addClass("white-player");
-            $(".secondary-player").addClass("black-player");
+            $(".white-player").removeClass("secondary-player").addClass("main-player");
+            $(".black-player").removeClass("main-player").addClass("secondary-player");
         } else {
-            $(".main-player").addClass("black-player");
-            $(".secondary-player").addClass("white-player");
+            $(".white-player").removeClass("main-player").addClass("secondary-player");
+            $(".black-player").removeClass("secondary-player").addClass("main-player");
         }
         $(".player-name").html(player.name);
         return this;
