@@ -97,7 +97,6 @@ Tile.prototype = {
             this.board.clearSelected();
         } else {
             if (!this.getUnit().isEnemyUnit(this.board.game.turnManager.getCurrentTurn().getPlayer())) {
-                this.el.addClass('selected');
                 this.board.onTileSelect(this);
             }
         }

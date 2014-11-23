@@ -139,105 +139,20 @@ Board.prototype = {
         this.selectedTile = null;
     },
     onTileSelect: function(tile) {
-        this.selectedTile = tile;
         if (!tile.isEmpty()) {
-            for (var direction in this.game.rules.moves) {
-                this.checkDirectionValidMoves(tile, this.game.rules.moves[direction], tile);
-            }
+            tile.el.addClass('selected');
+            this.selectedTile = tile;
+            var moveControl = new MoveControl({
+                board: this,
+                turn: this.game.turnManager.getCurrentTurn(),
+                currentTile: this.selectedTile,
+                currentUnit: this.selectedTile.getUnit(),
+                highlight: true
+            });
+            moveControl.checkAllDirections();
         }
-    },
-    //checks all valid moves in this direction and triggers diverging checks
-    checkDirectionValidMoves: function(previousTile, vDirection, startTile, diverging, action) {
-        var nextTile = this.traverse(previousTile, vDirection);
-        var selectedUnit = this.selectedTile.getUnit();
-        var canSwitch = ((!action || action == "canter") && this.game.rules.units[selectedUnit.type].chain);
-
-        if (nextTile) {
-            if (nextTile.isEmpty()) {
-                if (previousTile != startTile && !previousTile.isEmpty()) {
-                    var trafficUnit = previousTile.getUnit();
-                    var isFriendly = trafficUnit.isFriendlyUnit(selectedUnit.player);
-                    if (action == "canter" && !isFriendly && !canSwitch) {
-                        return;
-                    } else if (action == "jump" && isFriendly) {
-                        return;
-                    }
-                    newAction = (isFriendly) ? "canter" : "jump";
-                    if (action && newAction != action && !canSwitch) {
-                        return false;
-                    } else {
-                        action = newAction;
-                    }
-                }
-                if (previousTile == startTile) {
-                    if (!diverging) {
-                        nextTile.showValidMove();
-                    }
-                    return;
-                } else if (!previousTile.isEmpty()) {
-                    if (diverging) {
-                        nextTile.showDivergingMove();
-                    } else {
-                        nextTile.showValidMove();
-                    }
-                    this.checkDivergingMoves(nextTile, vDirection, action);
-                } else {
-                    return;
-                }
-            } else if (previousTile != startTile && !previousTile.isEmpty()) {
-                return;
-            }
-            this.checkDirectionValidMoves(nextTile, vDirection, startTile, diverging, action);
-        }
-        return;
-    },
-    checkDivergingMoves: function(tile, sourceDirectionVector, action) {
-        var opposite = this.getOppositeDirection(sourceDirectionVector);
-        for (var direction in this.game.rules.moves) {
-            direction = this.game.rules.moves[direction];
-            if (!arrayEqualTo(direction, opposite) && !arrayEqualTo(direction, sourceDirectionVector)) {
-                this.checkDirectionValidMoves(tile, direction, tile, true, action);
-            }
-        }
-    },
-    //these will be used instead of valid move once started moving (made first canter/jump)
-    checkAllProceedMoves: function(tile, sourceDirectionVector, action) {
-        var opposite = this.getOppositeDirection(sourceDirectionVector);
-        for (var direction in this.game.rules.moves) {
-            direction = this.game.rules.moves[direction];
-            if (!arrayEqualTo(direction, opposite) && !arrayEqualTo(direction, sourceDirectionVector)) {
-                this.checkProceedMoves(tile, direction, tile, true, action);
-            }
-        }
-    },
-    checkProceedMoves: function(previousTile, vDirection, startTile, diverging, action) {
-
     },
     getOppositeDirection: function(vector) {
         return [vector[0] * -1, vector[1] * -1];
     }
 };
-
-//Helper function to compare arrays
-function arrayEqualTo(source, array) {
-    // if the other array is a falsy value, return
-    if (!array)
-        return false;
-
-    // compare lengths - can save a lot of time
-    if (source.length != array.length)
-        return false;
-
-    for (var i = 0, l = source.length; i < l; i++) {
-        // Check if we have nested arrays
-        if (source[i] instanceof Array && array[i] instanceof Array) {
-            // recurse into the nested arrays
-            if (!arrayEqualtTo(source, array[i]))
-                return false;
-        } else if (source[i] != array[i]) {
-            // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;
-        }
-    }
-    return true;
-}
