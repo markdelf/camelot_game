@@ -1,5 +1,6 @@
 function Board(game, opts) {
     this.game = game;
+    this.resize();
     this.init();
 }
 
@@ -9,23 +10,23 @@ Board.prototype = {
         h: 16
     },
     tiles: [],
+    tileSize: null,
     game: null,
     castleStructure: [2, 8, 10],
-    el: null,
+    canvas: null,
+    context: null,
     selectedTile: null,
-    padding: 10,
     resize: function() {
         var window_w = $(window).width();
         var window_h = $(window).height();
 
-        var tile_h = (window_h - this.padding) / this.size.h;
-        var tile_w = (window_w - this.padding) / this.size.w;
-        var tile_size = (tile_h > tile_w) ? tile_w : tile_h;
-        $(".tile").each(function() {
-            $(this).css("width", tile_size + "px");
-            $(this).css("height", tile_size + "px");
-        });
-        this.el.css("width", ((tile_size * this.size.w) + this.padding) + "px");
+        var tile_h = Math.floor((window_h) / this.size.h);
+        var tile_w = Math.floor((window_w) / this.size.w);
+        this.tileSize = (tile_h > tile_w) ? tile_w : tile_h;
+        /*$(".tile").each(function() {
+            $(this).css("width", this.tileSize + "px");
+            $(this).css("height", this.tileSize + "px");
+        });*/
     },
     init: function() {
         this.tiles = [];
@@ -68,13 +69,17 @@ Board.prototype = {
     render: function() {
         var that = this;
         var that = this;
-        if (this.el == null) {
-            this.el = $("<div></div>").addClass("board");
+        if (this.canvas == null) {
+            this.canvas = $("<canvas></canvas>");
+            this.canvas.attr("width", ((this.tileSize * this.size.w)));
+            this.canvas.attr("height", ((this.tileSize * this.size.h)));
+            this.resize();
+            this.context = this.canvas[0].getContext("2d");
             for (var t in this.tiles) {
-                this.el.append(this.tiles[t].render());
+                this.tiles[t].render(this.context);
             }
         }
-        return this.el;
+        return this.canvas;
     },
     getTile: function(id) {
         for (var p in this.tiles) {
@@ -91,6 +96,7 @@ Board.prototype = {
         var row = parseInt(fromTile.id.substr(1)) + vector[1];
         var nextId = col.toString() + row.toString();
         var tile = this.getTile(nextId);
+
         if (tile && !tile.isOutlier()) {
             return tile;
         } else {
@@ -133,9 +139,9 @@ Board.prototype = {
         return tilesBetween;
     },
     clearSelected: function() {
-        this.el.find(".selected").removeClass("selected");
-        this.el.find(".valid-move").removeClass("valid-move");
-        this.el.find(".valid-move-diverging").removeClass("valid-move-diverging");
+        //this.el.find(".selected").removeClass("selected");
+        //this.el.find(".valid-move").removeClass("valid-move");
+        //this.el.find(".valid-move-diverging").removeClass("valid-move-diverging");
         this.selectedTile = null;
     },
     onTileSelect: function(tile) {

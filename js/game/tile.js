@@ -3,10 +3,24 @@ function Tile(opts) {
     this.alternate = opts.alternate;
 
     this.id = String.fromCharCode(65 + (parseInt(opts.col) - 1)) + (this.board.size.h - parseInt(opts.row) + 1);
+    console.log(this.id);
+
+    var nwPos = {
+        x: 0.5 + (parseInt(opts.col) - 1) * this.board.tileSize,
+        y: 0.5 + (parseInt(opts.row) - 1) * this.board.tileSize
+    };
+
+    this.corners = {
+        nw: nwPos,
+        ne: {x: nwPos.x + this.board.tileSize, y: nwPos.y},
+        sw: {x: nwPos.x, y: nwPos.y + this.board.tileSize},
+        se: {x: nwPos.x + this.board.tileSize, y: nwPos.y + this.board.tileSize}
+    };
 }
 
 Tile.prototype = {
     id: null,
+    corners: null,
     board: null,
     active: true,
     alternate: false,
@@ -14,8 +28,17 @@ Tile.prototype = {
     el: null,
     overlay: null,
     unit: null,
-    render: function() {
+    render: function(context) {
         var tile = this;
+
+        if (this.active) {
+            context.fillStyle = this.getFillStyle();
+            context.fillRect(this.corners.nw.x, this.corners.nw.y, this.board.tileSize, this.board.tileSize);
+        }
+
+        //to add click events somehow
+
+        /*
         if (this.el == null) {
             this.el = $("<div></div>").addClass("tile").attr("id", "tile_" + this.id);
             this.overlay = $("<div></div>").addClass("tile-overlay").appendTo(this.el);
@@ -44,7 +67,14 @@ Tile.prototype = {
                 }
             });
         }
-        return this.el;
+        return this.el;*/
+    },
+    getFillStyle: function() {
+        var fillStyle = "#000";
+        if (this.alternate) {
+            fillStyle = "#fff";
+        }
+        return fillStyle;
     },
     makeMove: function() {
         var unit = this.board.selectedTile.removeUnit();
@@ -75,7 +105,10 @@ Tile.prototype = {
     addUnit: function(unit) {
         if (this.unit == null) {
             this.unit = unit;
-            this.el.append(this.unit.getElement());
+
+            this.board.context.fillStyle = "#fcc";
+            this.board.context.fillRect(this.corners.nw.x + 15, this.corners.nw.y + 15, this.board.tileSize - 30, this.board.tileSize - 30);
+            //this.el.append(this.unit.getElement());
         }
     },
     removeUnit: function() {
@@ -135,6 +168,6 @@ Tile.prototype = {
         return this;
     },
     isOutlier: function() {
-        return this.el.hasClass("outlier");
+        return !this.active;
     }
 };
