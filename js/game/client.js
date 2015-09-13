@@ -22,8 +22,11 @@ Client.prototype = {
         this.socket.on("disconnect", function() {
             that.onDisconnect();
         });
-        this.socket.on("join-game", function(data) {
+        this.socket.on("joined_game", function(data) {
             that.onJoinGame(data);
+        });
+        this.socket.on("player_join", function(data) {
+            that.onPlayerJoin(data);
         });
         this.socket.on("leave-game", function(data) {
             that.onLeaveGame(data);
@@ -47,21 +50,46 @@ Client.prototype = {
         }
         return this.statusBar;
     },
-    newGame: function() {
-        this.socket.emit("new-game", {
+    doJoinGame: function() {
+        var data = {
             player: {
                 name: this.getPlayerName()
-            }
-        });
+            },
+        };
+        if (this.getGameCode()) {
+            data.gameCode = this.getGameCode();
+        }
+        this.socket.emit("join-game", data);
     },
     onJoinGame: function(data) {
-        this.activeGame = new Game();
+        var message = "Joined game: " + data.gameCode;
+        if(data.opponent) {
+            message += " with opponent " + data.opponent.name;
+        }
+
+        this.getStatusBar()
+            .removeClass("offline")
+            .html(message);
+        /*this.activeGame = new Game();
         this.ui = new Ui(this.activeGame);
         var board = new Board(this.activeGame);
         var rules = new Rules();
         this.activeGame.init(board, rules);
         this.getStatusBar()
-            .html("Joined game.");
+            .html("Joined game.");*/
+    },
+    onPlayerJoin: function(data) {
+        var message = data.name + " has joined the game.";
+        this.getStatusBar()
+            .removeClass("offline")
+            .html(message);
+        /*this.activeGame = new Game();
+        this.ui = new Ui(this.activeGame);
+        var board = new Board(this.activeGame);
+        var rules = new Rules();
+        this.activeGame.init(board, rules);
+        this.getStatusBar()
+            .html("Joined game.");*/
     },
     onLeaveGame: function() {
         this.activeGame.hide();
@@ -78,6 +106,9 @@ Client.prototype = {
     getPlayerName: function() {
         return localStorage.getItem("player.name");
     },
+    getGameCode: function() {
+        return localStorage.getItem("game.code");
+    },
     saveSettings: function() {
         var fields = $("#playerSettings input, #playerSettings select, #playerSettings textarea");
         fields.each(function() {
@@ -87,6 +118,7 @@ Client.prototype = {
             this.connect();
             $("#playerSettings").modal('hide');
         }
+        this.doJoinGame();
         return false;
     }
 };

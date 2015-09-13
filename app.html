@@ -13,7 +13,7 @@
 	<div id="status-bar">Welcome to Camelot</div>
 	<script src="js/libs/jquery-1.10.2.js"></script>
 	<script src="js/libs/bootstrap.min.js"></script>
-	<script src="js/libs/socket.io.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 	<script src="js/game/client.js"></script>
 	<script src="js/game/tile.js"></script>
 	<script src="js/game/unit.js"></script>
@@ -32,7 +32,7 @@
 		});
 	</script>
 	<div class="modal fade mapMoriesDialog" id="playerSettings" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog" style="width: 760px;">
+		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -41,6 +41,9 @@
 				<form onsubmit="return client.saveSettings();">
 					<div class="modal-body">
 							<input type="text" class="form-control" name="player.name" placeholder="Your name" required />
+					</div>
+					<div class="modal-body">
+					<input type="text" class="form-control" name="game.code" placeholder="Existing game code - leave empty to create a new game" />
 					</div>
 					<div class="modal-footer">
 						<button id="btn-ready" class="btn btn-success" type="submit">I'm ready</button>
