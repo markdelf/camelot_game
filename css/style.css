@@ -225,11 +225,11 @@ html, body{
 	z-index: 2;
 }
 
-#player-controls .white-player{
+#player-controls .light-player{
 	background-image: url('../img/theme/standard/knight-white.png');
 }
 
-#player-controls .black-player{
+#player-controls .dark-player{
 	background-image: url('../img/theme/standard/knight-black.png');
 }
 

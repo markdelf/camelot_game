@@ -23,14 +23,14 @@ Game.prototype = {
         this.players.p1 = new Player({
             id: 1,
             name: "Mark",
-            colour: "white",
+            colour: "light",
             isLocal: true,
             side: 1
         });
         this.players.p2 = new Player({
             id: 2,
             name: "Alex",
-            colour: "black",
+            colour: "dark",
             isLocal: true,
             side: 0
         });

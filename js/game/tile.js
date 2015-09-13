@@ -3,7 +3,6 @@ function Tile(opts) {
     this.alternate = opts.alternate;
 
     this.id = String.fromCharCode(65 + (parseInt(opts.col) - 1)) + (this.board.size.h - parseInt(opts.row) + 1);
-    console.log(this.id);
 
     var nwPos = {
         x: 0.5 + (parseInt(opts.col) - 1) * this.board.tileSize,
@@ -106,8 +105,12 @@ Tile.prototype = {
         if (this.unit == null) {
             this.unit = unit;
 
-            this.board.context.fillStyle = "#fcc";
-            this.board.context.fillRect(this.corners.nw.x + 15, this.corners.nw.y + 15, this.board.tileSize - 30, this.board.tileSize - 30);
+            this.unit.render(
+                this.board.context,
+                this.corners.nw.x,
+                this.corners.nw.y,
+                this.board.tileSize
+            );
             //this.el.append(this.unit.getElement());
         }
     },
