@@ -64,7 +64,22 @@ Game.prototype = {
     render: function() {
         if (!this.el) {
             this.el = $("#game-container");
-            this.el.append(this.board.render());
+            this.el.append(this.board.canvas);
+
+            var that = this;
+            this.el[0].addEventListener("mousemove", function(e){
+                that.board.onMouseMove(e.x, e.y);
+            });
+
+            this.el[0].addEventListener("click", function(e){
+                that.board.onMouseClick(e.x, e.y);
+            });
+
+
+            var that = this;
+            setInterval(function(){
+                that.board.render();       
+            }, 10);
         }
         return this.el;
     },

@@ -22,17 +22,62 @@ Tile.prototype = {
     corners: null,
     board: null,
     active: true,
+    highlight: false,
+    selected: false,
     alternate: false,
     first: false,
     el: null,
     overlay: null,
     unit: null,
+    pointInBounds: function(x, y) {
+        var inXBounds = (x >= this.corners.nw.x) && 
+            (x <= this.corners.ne.x);
+        var inYBounds = (y >= this.corners.nw.y) && 
+            (y <= this.corners.sw.y);
+        return (inXBounds && inYBounds);
+    },
+    checkMouseOver: function(x, y) {
+        if (this.pointInBounds(x, y) && this.active) {
+            this.highlight = true;
+        } else {
+            this.highlight = false;
+        }
+    },
+    checkMouseClick: function(x, y) {
+        if (this.pointInBounds(x, y) && this.active) {
+            this.selected = true;
+        } else {
+            this.selected = false;
+        }
+    },
     render: function(context) {
         var tile = this;
 
-        if (this.active) {
+        if (!this.active) {
+            return;
+        }
+
+        if (this.highlight) {
+            context.fillStyle = "#fe2d80";
+        } else {
             context.fillStyle = this.getFillStyle();
-            context.fillRect(this.corners.nw.x, this.corners.nw.y, this.board.tileSize, this.board.tileSize);
+        }
+
+        if (this.selected) {
+            context.fillStyle = "#50b05e";
+        }
+
+        context.fillRect(this.corners.nw.x, this.corners.nw.y, this.board.tileSize, this.board.tileSize);
+
+        if (this.unit) {
+
+            this.unit.render(
+                context,
+                this.corners.nw.x,
+                this.corners.nw.y,
+                this.board.tileSize
+            );
+
         }
 
         //to add click events somehow
@@ -104,15 +149,8 @@ Tile.prototype = {
     addUnit: function(unit) {
         if (this.unit == null) {
             this.unit = unit;
-
-            this.unit.render(
-                this.board.context,
-                this.corners.nw.x,
-                this.corners.nw.y,
-                this.board.tileSize
-            );
-            //this.el.append(this.unit.getElement());
         }
+        //this.el.append(this.unit.getElement());
     },
     removeUnit: function() {
         if (this.unit != null) {

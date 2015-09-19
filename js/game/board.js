@@ -65,21 +65,33 @@ Board.prototype = {
             }
             hc++;
         }
+
+        this.canvas = $("<canvas></canvas>");
+        return this.canvas;
     },
     render: function() {
         var that = this;
         var that = this;
-        if (this.canvas == null) {
-            this.canvas = $("<canvas></canvas>");
-            this.canvas.attr("width", ((this.tileSize * this.size.w)));
-            this.canvas.attr("height", ((this.tileSize * this.size.h)));
-            this.resize();
-            this.context = this.canvas[0].getContext("2d");
-            for (var t in this.tiles) {
-                this.tiles[t].render(this.context);
-            }
+        
+        this.canvas.attr("width", ((this.tileSize * this.size.w)));
+        this.canvas.attr("height", ((this.tileSize * this.size.h)));
+        this.resize();
+        this.context = this.canvas[0].getContext("2d");
+
+        this.context.clearRect(0,0,this.size.w, this.size.h);
+        for (var t in this.tiles) {
+            this.tiles[t].render(this.context);
         }
-        return this.canvas;
+    },
+    onMouseMove: function(x, y) {
+        for (var t in this.tiles) {
+            this.tiles[t].checkMouseOver(x, y);
+        }
+    },
+    onMouseClick: function(x, y) {
+        for (var t in this.tiles) {
+            this.tiles[t].checkMouseClick(x, y);
+        }
     },
     getTile: function(id) {
         for (var p in this.tiles) {
